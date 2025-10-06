@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -43,6 +44,20 @@ final class AuthController extends AbstractController
                 'user' => $user
             ],
             $result ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST
+        );
+    }
+
+    #[Route('/api/me', methods: ['GET'])]
+    public function me(): JsonResponse {
+        $user = $this->getUser();
+        return $this->json(
+            [
+                'user' => $user
+            ],
+            Response::HTTP_OK,
+            context: [
+                'groups' => ['user:read']
+            ]
         );
     }
 }

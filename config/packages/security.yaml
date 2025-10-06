@@ -23,7 +23,13 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
             jwt: ~
+        api:
+            pattern: ^/api
+            provider: app_user_provider
+            stateless: true
+            security: true
+            jwt: ~
 
     access_control:
         - { path: ^/auth, roles: PUBLIC_ACCESS }
-        - {path: ^/, roles: IS_AUTHENTICATED_FULLY }
+        - {path: ^/api, roles: IS_AUTHENTICATED_FULLY }
