@@ -3,11 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: 'orders')]
@@ -50,7 +50,6 @@ class Orders
     #[Groups(['order:read'])]
     private Collection $items;
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -64,6 +63,7 @@ class Orders
     public function setName(string $name): Orders
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -75,6 +75,7 @@ class Orders
     public function setDescription(?string $description): Orders
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -86,6 +87,7 @@ class Orders
     public function setStatus(string $status): Orders
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -97,11 +99,13 @@ class Orders
     public function setTotal(int $total): Orders
     {
         $this->total = $total;
+
         return $this;
     }
 
     /** @return Collection<int, OrderItem> */
-    public function getItems(): Collection {
+    public function getItems(): Collection
+    {
         return $this->items;
     }
 
@@ -112,6 +116,7 @@ class Orders
             $item->setOrder($this);
             $this->recalculateTotal();
         }
+
         return $this;
     }
 
@@ -123,6 +128,7 @@ class Orders
             }
             $this->recalculateTotal();
         }
+
         return $this;
     }
 

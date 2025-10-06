@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity\User;
@@ -12,6 +13,7 @@ class UserService
         private readonly UserPasswordHasherInterface $passwordHasher,
     ) {
     }
+
     public function register(User $user): bool
     {
         if (null !== $user->getPasswordPlain()) {
@@ -26,5 +28,4 @@ class UserService
 
         return true;
     }
-
 }

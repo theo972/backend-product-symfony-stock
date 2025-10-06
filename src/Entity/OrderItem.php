@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -40,9 +41,11 @@ class OrderItem
     {
         return $this->order;
     }
+
     public function setOrder(?Orders $order): OrderItem
     {
         $this->order = $order;
+
         return $this;
     }
 
@@ -50,9 +53,11 @@ class OrderItem
     {
         return $this->product;
     }
+
     public function setProduct(?Product $product): OrderItem
     {
         $this->product = $product;
+
         return $this;
     }
 
@@ -60,9 +65,11 @@ class OrderItem
     {
         return $this->price;
     }
+
     public function setPrice(int $price): OrderItem
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -74,6 +81,7 @@ class OrderItem
     public function setQuantity(int $quantity): OrderItem
     {
         $this->quantity = $quantity;
+
         return $this;
     }
 }

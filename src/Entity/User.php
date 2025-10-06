@@ -63,12 +63,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
+
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
         return $this;
     }
 
@@ -89,7 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->passwordPlain = null;
     }
 
-
     public function getPasswordPlain(): string
     {
         return $this->passwordPlain;
@@ -98,6 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPasswordPlain(string $password): User
     {
         $this->passwordPlain = $password;
+
         return $this;
     }
 }

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: 'products')]
 class Product
@@ -59,6 +60,7 @@ class Product
     public function setName(string $name): Product
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -70,6 +72,7 @@ class Product
     public function setDescription(?string $description): Product
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -81,6 +84,7 @@ class Product
     public function setPrice(int $price): Product
     {
         $this->price = $price;
+
         return $this;
     }
 
@@ -92,6 +96,7 @@ class Product
     public function setStock(int $stock): Product
     {
         $this->stock = $stock;
+
         return $this;
     }
 
@@ -107,6 +112,7 @@ class Product
             $this->orderItems->add($orderItem);
             $orderItem->setProduct($this);
         }
+
         return $this;
     }
 
@@ -117,6 +123,7 @@ class Product
                 $orderItem->setProduct(null);
             }
         }
+
         return $this;
     }
 }

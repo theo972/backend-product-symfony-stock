@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Event;
 
 use App\Entity\Orders;
@@ -6,7 +7,7 @@ use App\Entity\Orders;
 final readonly class OrderCreatedEvent
 {
     public function __construct(
-        private Orders $orders
+        private Orders $orders,
     ) {
     }
 

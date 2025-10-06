@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity\Orders;
@@ -10,7 +11,7 @@ class OrderService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly EventDispatcherInterface $dispatcher
+        private readonly EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -19,12 +20,14 @@ class OrderService
         $this->em->persist($order);
         $this->em->flush();
         $this->dispatcher->dispatch(new OrderCreatedEvent($order));
+
         return true;
     }
 
     public function update(Orders $order): bool
     {
         $this->em->flush();
+
         return true;
     }
 
@@ -35,5 +38,4 @@ class OrderService
 
         return true;
     }
-
 }

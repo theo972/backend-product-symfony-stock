@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity\Product;
@@ -22,6 +23,7 @@ class ProductService
     public function update(Product $product): bool
     {
         $this->em->flush();
+
         return true;
     }
 
@@ -32,5 +34,4 @@ class ProductService
 
         return true;
     }
-
 }

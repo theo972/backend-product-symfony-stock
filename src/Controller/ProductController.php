@@ -6,8 +6,8 @@ use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -20,16 +20,16 @@ class ProductController extends AbstractController
     #[Route('', methods: ['GET'])]
     public function list(
         ProductRepository $productRepository,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $products = $productRepository->findAll();
+
         return $this->json(
             [
-                'products' => $products
+                'products' => $products,
             ],
             Response::HTTP_OK,
             context: [
-                'groups' => ['product:read']
+                'groups' => ['product:read'],
             ]
         );
     }
@@ -38,24 +38,24 @@ class ProductController extends AbstractController
     public function getProduct(
         string $id,
         ProductRepository $productRepository,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $product = $productRepository->findOneBy(['id' => $id]);
-        if ($product === null) {
+        if (null === $product) {
             return $this->json([
                 'result' => false,
                 'errors' => [
-                    'Not Found'
-                ]
+                    'Not Found',
+                ],
             ], Response::HTTP_NOT_FOUND);
         }
+
         return $this->json(
             [
-                'product' => $product
+                'product' => $product,
             ],
             Response::HTTP_OK,
             context: [
-                'groups' => ['product:read']
+                'groups' => ['product:read'],
             ]
         );
     }
@@ -65,9 +65,8 @@ class ProductController extends AbstractController
         Request $request,
         ValidatorInterface $validator,
         SerializerInterface $serializer,
-        ProductService $productService
-    ): JsonResponse
-    {
+        ProductService $productService,
+    ): JsonResponse {
         $result = false;
         /** @var Product $product */
         $product = $serializer->deserialize(
@@ -78,7 +77,7 @@ class ProductController extends AbstractController
         );
 
         $errors = $validator->validate($product, null, ['register:create']);
-        if (count($errors) === 0) {
+        if (0 === count($errors)) {
             $result = $productService->create($product);
         }
 
@@ -86,11 +85,11 @@ class ProductController extends AbstractController
             [
                 'result' => $result,
                 'errors' => $errors,
-                'product' => $product
+                'product' => $product,
             ],
             $result ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             context: [
-                'groups' => ['product:read']
+                'groups' => ['product:read'],
             ]
         );
     }
@@ -102,28 +101,27 @@ class ProductController extends AbstractController
         ValidatorInterface $validator,
         SerializerInterface $serializer,
         ProductRepository $productRepository,
-        ProductService $productService
-    ): JsonResponse
-    {
+        ProductService $productService,
+    ): JsonResponse {
         $result = false;
         $product = $productRepository->findOneBy(['id' => $id]);
-        if ($product === null) {
+        if (null === $product) {
             return $this->json([
                 'result' => false,
                 'errors' => [
-                    'Not Found'
-                ]
+                    'Not Found',
+                ],
             ], Response::HTTP_NOT_FOUND);
         }
         $content = (string) $request->getContent();
         /** @var Product $product */
         $product = $serializer->deserialize($content, Product::class, 'json', [
             'groups' => ['product:update'],
-            AbstractNormalizer::OBJECT_TO_POPULATE => $product
+            AbstractNormalizer::OBJECT_TO_POPULATE => $product,
         ]);
 
         $errors = $validator->validate($product, null, ['product:update']);
-        if (count($errors) === 0) {
+        if (0 === count($errors)) {
             $result = $productService->update($product);
         }
 
@@ -131,11 +129,11 @@ class ProductController extends AbstractController
             [
                 'result' => $result,
                 'errors' => $errors,
-                'product' => $product
+                'product' => $product,
             ],
             $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
             context: [
-                'groups' => ['product:read']
+                'groups' => ['product:read'],
             ]
         );
     }
@@ -144,17 +142,16 @@ class ProductController extends AbstractController
     public function delete(
         string $id,
         ProductRepository $productRepository,
-        ProductService $productService
-    ): JsonResponse
-    {
+        ProductService $productService,
+    ): JsonResponse {
         $result = false;
         $product = $productRepository->findOneBy(['id' => $id]);
-        if ($product === null) {
+        if (null === $product) {
             return $this->json([
                 'result' => false,
                 'errors' => [
-                    'Not Found'
-                ]
+                    'Not Found',
+                ],
             ], Response::HTTP_NOT_FOUND);
         }
         $result = $productService->delete($product);
@@ -162,11 +159,11 @@ class ProductController extends AbstractController
         return $this->json(
             [
                 'result' => $result,
-                'product' => $product
+                'product' => $product,
             ],
             $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
             context: [
-                'groups' => ['product:read']
+                'groups' => ['product:read'],
             ]
         );
     }
