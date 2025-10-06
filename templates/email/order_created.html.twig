@@ -1,0 +1,22 @@
+<h2>Commande {{ orderName }} ({{ status }})</h2>
+<div>La commande a été créée et voici les produits de la commande :</div>
+<table style="border-collapse:collapse;border-spacing:0;width:100%;font-family:Arial,Helvetica,sans-serif;">
+    <thead>
+    <tr>
+        <th scope="col" style="text-align:left;padding:8px;border:1px solid #e5e7eb;background:#f9fafb;">Produit</th>
+        <th scope="col" style="text-align:right;padding:8px;border:1px solid #e5e7eb;background:#f9fafb;">Quantity</th>
+        <th scope="col" style="text-align:right;padding:8px;border:1px solid #e5e7eb;background:#f9fafb;">Price</th>
+        <th scope="col" style="text-align:right;padding:8px;border:1px solid #e5e7eb;background:#f9fafb;">Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for line in lines %}
+        <tr>
+            <td style="padding:8px;border:1px solid #e5e7eb;">{{ line.name }}</td>
+            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ line.quantity }}</td>
+            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ (line.price/100)|number_format(2, ',', ' ') }} €</td>
+            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ (line.sum_total/100)|number_format(2, ',', ' ') }} €</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

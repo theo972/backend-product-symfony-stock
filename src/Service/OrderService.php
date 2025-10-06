@@ -2,12 +2,15 @@
 namespace App\Service;
 
 use App\Entity\Orders;
+use App\Event\OrderCreatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class OrderService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly EventDispatcherInterface $dispatcher
     ) {
     }
 
@@ -15,7 +18,7 @@ class OrderService
     {
         $this->em->persist($order);
         $this->em->flush();
-
+        $this->dispatcher->dispatch(new OrderCreatedEvent($order));
         return true;
     }
 
