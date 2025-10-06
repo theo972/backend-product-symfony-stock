@@ -14,8 +14,8 @@
         <tr>
             <td style="padding:8px;border:1px solid #e5e7eb;">{{ line.name }}</td>
             <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ line.quantity }}</td>
-            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ (line.price/100)|number_format(2, ',', ' ') }} €</td>
-            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ (line.sum_total/100)|number_format(2, ',', ' ') }} €</td>
+            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ line.price }} €</td>
+            <td style="padding:8px;border:1px solid #e5e7eb;text-align:right;">{{ line.sum_total }} €</td>
         </tr>
     {% endfor %}
     </tbody>
