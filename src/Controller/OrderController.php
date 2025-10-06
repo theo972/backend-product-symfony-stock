@@ -3,7 +3,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
+use App\Entity\Orders;
 use App\Repository\OrderRepository;
 use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -66,10 +66,10 @@ class OrderController extends AbstractController
     {
         $result = false;
         $data = $request->getContent();
-        /** @var Order $order */
+        /** @var Orders $order */
         $order = $serializer->deserialize(
             $data,
-            Order::class,
+            Orders::class,
             'json',
             ['groups' => ['order:create']]
         );
@@ -112,10 +112,10 @@ class OrderController extends AbstractController
         }
 
         $data = $request->getContent();
-        /** @var Order $order */
+        /** @var Orders $order */
         $order = $serializer->deserialize(
             $data,
-            Order::class,
+            Orders::class,
             'json',
             [
                 'groups' => ['order:update'],

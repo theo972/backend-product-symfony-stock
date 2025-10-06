@@ -1,7 +1,7 @@
 <?php
 namespace App\Service;
 
-use App\Entity\Order;
+use App\Entity\Orders;
 use Doctrine\ORM\EntityManagerInterface;
 
 class OrderService
@@ -11,7 +11,7 @@ class OrderService
     ) {
     }
 
-    public function create(Order $order): bool
+    public function create(Orders $order): bool
     {
         $this->em->persist($order);
         $this->em->flush();
@@ -19,13 +19,13 @@ class OrderService
         return true;
     }
 
-    public function update(Order $order): bool
+    public function update(Orders $order): bool
     {
         $this->em->flush();
         return true;
     }
 
-    public function delete(Order $order): bool
+    public function delete(Orders $order): bool
     {
         $this->em->remove($order);
         $this->em->flush();
