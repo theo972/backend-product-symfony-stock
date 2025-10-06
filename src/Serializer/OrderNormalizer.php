@@ -36,23 +36,20 @@ final class OrderNormalizer implements DenormalizerInterface, DenormalizerAwareI
     {
         $itemsPayload = $data['items'] ?? null;
         unset($data['items']);
-
         /** @var Orders $order */
         $order = $this->normalizer->denormalize($data, $type, $format, $context);
-
         if (\is_array($itemsPayload)) {
             foreach ($itemsPayload as $row) {
                 $product = $this->productRepository->find($row['productId']);
                 if (!$product) {
                     throw new \InvalidArgumentException("PRODUCT_NOT_FOUND: " .$row['productId']);
                 }
-                $quantity = max(1, (int)($row['quantity'] ?? 1));
 
                 $item = new OrderItem();
                 $item->setProduct($product);
-                $item->setQuantity($quantity);
-                $item->setUnitPrice($product->getPrice()); // prix figé ici
-                $order->addItem($item); // maintient la bidirection + recalc
+                $item->setQuantity($row['quantity']);
+                $item->setPrice($product->getPrice());
+                $order->addItem($item);
             }
         }
 
