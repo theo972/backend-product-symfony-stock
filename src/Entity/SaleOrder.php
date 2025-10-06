@@ -2,16 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\OrderRepository;
+use App\Repository\SaleOrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: 'orders')]
-class Orders
+#[ORM\Entity(repositoryClass: SaleOrderRepository::class)]
+#[ORM\Table(name: 'saleOrder')]
+class SaleOrder
 {
     public function __construct()
     {
@@ -25,29 +25,29 @@ class Orders
 
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
     #[Assert\NotBlank]
-    #[Groups(['order:read', 'order:create', 'order:update'])]
+    #[Groups(['saleOrder:read', 'saleOrder:create', 'saleOrder:update'])]
     private string $name;
 
     #[ORM\Column(name: 'description', type: 'text', nullable: true)]
-    #[Groups(['order:read', 'order:create', 'order:update'])]
+    #[Groups(['saleOrder:read', 'saleOrder:create', 'saleOrder:update'])]
     private ?string $description = null;
 
     #[ORM\Column(name: 'status', type: 'string', length: 100, nullable: false)]
     #[Assert\Choice(
         options: ['delivery_in_progress', 'received', 'partially_received', 'cancelled'],
         message: 'Status invalid',
-        groups: ['order:create', 'order:update']
+        groups: ['saleOrder:create', 'saleOrder:update']
     )]
-    #[Groups(['order:read', 'order:create', 'order:update'])]
+    #[Groups(['saleOrder:read', 'saleOrder:create', 'saleOrder:update'])]
     private string $status = 'delivery_in_progress';
 
     #[ORM\Column(name: 'total', type: 'integer')]
     #[Assert\NotNull]
-    #[Groups(['order:read', 'order:create', 'order:update'])]
+    #[Groups(['saleOrder:read', 'saleOrder:create', 'saleOrder:update'])]
     private int $total = 0;
 
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
-    #[Groups(['order:read'])]
+    #[ORM\OneToMany(mappedBy: 'saleOrder', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Groups(['saleOrder:read'])]
     private Collection $items;
 
     public function getId(): ?int
@@ -60,7 +60,7 @@ class Orders
         return $this->name;
     }
 
-    public function setName(string $name): Orders
+    public function setName(string $name): SaleOrder
     {
         $this->name = $name;
 
@@ -72,7 +72,7 @@ class Orders
         return $this->description;
     }
 
-    public function setDescription(?string $description): Orders
+    public function setDescription(?string $description): SaleOrder
     {
         $this->description = $description;
 
@@ -84,7 +84,7 @@ class Orders
         return $this->status;
     }
 
-    public function setStatus(string $status): Orders
+    public function setStatus(string $status): SaleOrder
     {
         $this->status = $status;
 
@@ -96,7 +96,7 @@ class Orders
         return $this->total;
     }
 
-    public function setTotal(int $total): Orders
+    public function setTotal(int $total): SaleOrder
     {
         $this->total = $total;
 
@@ -109,7 +109,7 @@ class Orders
         return $this->items;
     }
 
-    public function addItem(OrderItem $item): Orders
+    public function addItem(OrderItem $item): SaleOrder
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
@@ -120,7 +120,7 @@ class Orders
         return $this;
     }
 
-    public function removeItem(OrderItem $item): Orders
+    public function removeItem(OrderItem $item): SaleOrder
     {
         if ($this->items->removeElement($item)) {
             if ($item->getOrder() === $this) {

@@ -9,7 +9,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
 #[AsEventListener(event: OrderCreatedEvent::class, method: 'onOrderCreated')]
-final class OrderEvent
+final class SaleOrderEvent
 {
     public function __construct(
         private MailerInterface $mailer,
@@ -18,9 +18,9 @@ final class OrderEvent
 
     public function onOrderCreated(OrderCreatedEvent $event): void
     {
-        $order = $event->getOrder();
+        $saleOrder = $event->getOrder();
         $lines = [];
-        foreach ($order->getItems() as $item) {
+        foreach ($saleOrder->getItems() as $item) {
             $product = $item->getProduct();
             $lines[] = [
                 'name' => $product?->getName() ?? 'Produit',
@@ -34,12 +34,12 @@ final class OrderEvent
         $email = (new TemplatedEmail())
             ->from(new Address('admin@symfony-stock.test', 'Stock Shop'))
             ->to($to)
-            ->subject('Commande '.$order->getName().' confirmée')
+            ->subject('Commande '.$saleOrder->getName().' confirmée')
             ->htmlTemplate('email/order_created.html.twig')
             ->context([
-                'orderName' => $order->getName(),
-                'status' => $order->getStatus(),
-                'total' => $order->getTotal(),
+                'orderName' => $saleOrder->getName(),
+                'status' => $saleOrder->getStatus(),
+                'total' => $saleOrder->getTotal(),
                 'lines' => $lines,
             ]);
 

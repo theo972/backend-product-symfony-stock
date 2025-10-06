@@ -2,17 +2,17 @@
 
 namespace App\Event;
 
-use App\Entity\Orders;
+use App\Entity\SaleOrder;
 
 final readonly class OrderCreatedEvent
 {
     public function __construct(
-        private Orders $orders,
+        private SaleOrder $saleOrder,
     ) {
     }
 
-    public function getOrder(): Orders
+    public function getOrder(): SaleOrder
     {
-        return $this->orders;
+        return $this->saleOrder;
     }
 }

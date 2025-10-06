@@ -3,7 +3,7 @@
 namespace App\Serializer;
 
 use App\Entity\OrderItem;
-use App\Entity\Orders;
+use App\Entity\SaleOrder;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class OrderNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
+final class SaleOrderNormalizer implements DenormalizerInterface, DenormalizerAwareInterface
 {
     use DenormalizerAwareTrait;
 
@@ -26,20 +26,20 @@ final class OrderNormalizer implements DenormalizerInterface, DenormalizerAwareI
 
     public function supportsDenormalization($data, $type, $format = null, array $context = []): bool
     {
-        return Orders::class === $type;
+        return SaleOrder::class === $type;
     }
 
     public function getSupportedTypes(?string $format): array
     {
-        return [Orders::class => true];
+        return [SaleOrder::class => true];
     }
 
-    public function denormalize($data, $type, $format = null, array $context = []): Orders
+    public function denormalize($data, $type, $format = null, array $context = []): SaleOrder
     {
         $itemsPayload = $data['items'] ?? null;
         unset($data['items']);
-        /** @var Orders $order */
-        $order = $this->normalizer->denormalize($data, $type, $format, $context);
+        /** @var SaleOrder $saleOrder */
+        $saleOrder = $this->normalizer->denormalize($data, $type, $format, $context);
         if (\is_array($itemsPayload)) {
             foreach ($itemsPayload as $row) {
                 $product = $this->productRepository->find($row['productId']);
@@ -51,10 +51,10 @@ final class OrderNormalizer implements DenormalizerInterface, DenormalizerAwareI
                 $item->setProduct($product);
                 $item->setQuantity($row['quantity']);
                 $item->setPrice($product->getPrice());
-                $order->addItem($item);
+                $saleOrder->addItem($item);
             }
         }
 
-        return $order;
+        return $saleOrder;
     }
 }

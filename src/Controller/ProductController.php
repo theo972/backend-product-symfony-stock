@@ -36,23 +36,10 @@ class ProductController extends AbstractController
 
     #[Route('/{id}', methods: ['GET'])]
     public function getProduct(
-        string $id,
-        ProductRepository $productRepository,
+        Product $product
     ): JsonResponse {
-        $product = $productRepository->findOneBy(['id' => $id]);
-        if (null === $product) {
-            return $this->json([
-                'result' => false,
-                'errors' => [
-                    'Not Found',
-                ],
-            ], Response::HTTP_NOT_FOUND);
-        }
-
         return $this->json(
-            [
-                'product' => $product,
-            ],
+            ['product' => $product],
             Response::HTTP_OK,
             context: [
                 'groups' => ['product:read'],

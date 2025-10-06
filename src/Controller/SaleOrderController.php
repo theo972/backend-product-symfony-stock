@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Orders;
-use App\Repository\OrderRepository;
-use App\Service\OrderService;
+use App\Entity\SaleOrder;
+use App\Repository\SaleOrderRepository;
+use App\Service\SaleOrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +22,7 @@ class OrderController extends AbstractController
         OrderRepository $orderRepository,
     ): JsonResponse {
         $orders = $orderRepository->findAll();
+        $size = $request->query->getInt('perPage', 10);
 
         return $this->json(
             ['orders' => $orders],
@@ -34,74 +35,64 @@ class OrderController extends AbstractController
 
     #[Route('/{id}', methods: ['GET'])]
     public function getOrder(
-        string $id,
-        OrderRepository $orderRepository,
-        SerializerInterface $serializer,
+        SaleOrder $saleOrder,
     ): JsonResponse {
-        $order = $orderRepository->find($id);
-        if (null === $order) {
-            return $this->json([
-                'result' => false,
-                'errors' => ['Not Found'],
-            ], Response::HTTP_NOT_FOUND);
-        }
-
         return $this->json(
-            ['order' => $order],
+            ['saleOrder' => $saleOrder],
             Response::HTTP_OK,
             context: [
-                'groups' => ['order:read'],
+                'groups' => ['saleOrder:read'],
             ]
         );
     }
 
     #[Route('', methods: ['POST'])]
     public function create(
-        Request $request,
-        ValidatorInterface $validator,
+        Request             $request,
+        ValidatorInterface  $validator,
         SerializerInterface $serializer,
-        OrderService $orderService,
+        SaleOrderService    $orderService,
     ): JsonResponse {
         $result = false;
         $data = $request->getContent();
-        /** @var Orders $order */
-        $order = $serializer->deserialize(
+        /** @var SaleOrder $saleOrder */
+        $saleOrder = $serializer->deserialize(
             $data,
-            Orders::class,
+            SaleOrder::class,
             'json',
-            ['groups' => ['order:create']]
+            ['groups' => ['saleOrder:create']]
         );
 
-        $errors = $validator->validate($order, null, ['order:create']);
+        $errors = $validator->validate($saleOrder, null, ['saleOrder:create']);
         if (0 === count($errors)) {
-            $result = $orderService->create($order);
+            $result = $orderService->create($saleOrder);
         }
 
         return $this->json(
             [
                 'result' => $result,
                 'errors' => $errors,
-                'order' => $order,
+                'saleOrder' => $saleOrder,
             ],
             $result ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
             context: [
-                'groups' => ['order:read'],
+                'groups' => ['saleOrder:read'],
             ]
         );
     }
 
     #[Route('/{id}', methods: ['PUT', 'PATCH'])]
     public function update(
-        string $id,
-        Request $request,
-        OrderRepository $orderRepository,
-        ValidatorInterface $validator,
+        int                 $id,
+        Request             $request,
+        SaleOrderRepository $orderRepository,
+        ValidatorInterface  $validator,
         SerializerInterface $serializer,
-        OrderService $orderService,
+        SaleOrderService    $orderService,
     ): JsonResponse {
         $result = false;
-        $order = $orderRepository->find($id);
-        if (null === $order) {
+        $saleOrder = $orderRepository->find($id);
+        if (null === $saleOrder) {
             return $this->json([
                 'result' => false,
                 'errors' => ['Not Found'],
@@ -109,59 +100,59 @@ class OrderController extends AbstractController
         }
 
         $data = $request->getContent();
-        /** @var Orders $order */
-        $order = $serializer->deserialize(
+        /** @var SaleOrder $saleOrder */
+        $saleOrder = $serializer->deserialize(
             $data,
-            Orders::class,
+            SaleOrder::class,
             'json',
             [
-                'groups' => ['order:update'],
-                AbstractNormalizer::OBJECT_TO_POPULATE => $order,
+                'groups' => ['saleOrder:update'],
+                AbstractNormalizer::OBJECT_TO_POPULATE => $saleOrder,
             ]
         );
 
-        $errors = $validator->validate($order, null, ['order:update']);
+        $errors = $validator->validate($saleOrder, null, ['saleOrder:update']);
         if (0 === count($errors)) {
-            $result = $orderService->update($order);
+            $result = $orderService->update($saleOrder);
         }
 
         return $this->json(
             [
                 'result' => $result,
                 'errors' => $errors,
-                'order' => $order,
+                'saleOrder' => $saleOrder,
             ],
             $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
             context: [
-                'groups' => ['order:read'],
+                'groups' => ['saleOrder:read'],
             ]
         );
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
     public function delete(
-        string $id,
-        OrderRepository $orderRepository,
-        OrderService $orderService,
+        int                 $id,
+        SaleOrderRepository $orderRepository,
+        SaleOrderService    $orderService,
     ): JsonResponse {
-        $order = $orderRepository->find($id);
-        if (null === $order) {
+        $saleOrder = $orderRepository->find($id);
+        if (null === $saleOrder) {
             return $this->json([
                 'result' => false,
                 'errors' => ['Not Found'],
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $result = $orderService->delete($order);
+        $result = $orderService->delete($saleOrder);
 
         return $this->json(
             [
                 'result' => $result,
-                'order' => $order,
+                'saleOrder' => $saleOrder,
             ],
             $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
             context: [
-                'groups' => ['order:read'],
+                'groups' => ['saleOrder:read'],
             ]
         );
     }

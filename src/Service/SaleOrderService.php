@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Entity\Orders;
+use App\Entity\SaleOrder;
 use App\Event\OrderCreatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class OrderService
+class SaleOrderService
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -15,25 +15,25 @@ class OrderService
     ) {
     }
 
-    public function create(Orders $order): bool
+    public function create(SaleOrder $saleOrder): bool
     {
-        $this->em->persist($order);
+        $this->em->persist($saleOrder);
         $this->em->flush();
-        $this->dispatcher->dispatch(new OrderCreatedEvent($order));
+        $this->dispatcher->dispatch(new OrderCreatedEvent($saleOrder));
 
         return true;
     }
 
-    public function update(Orders $order): bool
+    public function update(SaleOrder $saleOrder): bool
     {
         $this->em->flush();
 
         return true;
     }
 
-    public function delete(Orders $order): bool
+    public function delete(SaleOrder $saleOrder): bool
     {
-        $this->em->remove($order);
+        $this->em->remove($saleOrder);
         $this->em->flush();
 
         return true;

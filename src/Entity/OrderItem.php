@@ -12,24 +12,25 @@ class OrderItem
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(name: 'id', type: 'integer', options: ['unsigned' => true])]
-    #[Groups(['order:read'])]
+    #[Groups(['saleOrder:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'order_id', nullable: false, onDelete: 'CASCADE')]
-    private ?Orders $order = null;
+    #[Groups(['product:read'])]
+    private ?SaleOrder $saleOrder = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderItems')]
     #[ORM\JoinColumn(name: 'product_id', nullable: false)]
-    #[Groups(['order:read'])]
+    #[Groups(['saleOrder:read'])]
     private ?Product $product = null;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(['order:read'])]
+    #[Groups(['saleOrder:read'])]
     private int $price = 0;
 
     #[ORM\Column(type: 'integer')]
-    #[Groups(['order:read'])]
+    #[Groups(['saleOrder:read'])]
     private int $quantity = 1;
 
     public function getId(): ?int
@@ -37,14 +38,14 @@ class OrderItem
         return $this->id;
     }
 
-    public function getOrder(): ?Orders
+    public function getOrder(): ?SaleOrder
     {
-        return $this->order;
+        return $this->saleOrder;
     }
 
-    public function setOrder(?Orders $order): OrderItem
+    public function setOrder(?SaleOrder $saleOrder): OrderItem
     {
-        $this->order = $order;
+        $this->saleOrder = $saleOrder;
 
         return $this;
     }
