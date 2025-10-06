@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -33,7 +32,7 @@ final class AuthController extends AbstractController
 
         $user->setPasswordPlain($user->getPassword());
         $errors = $validator->validate($user, null, ['register:create']);
-        if (count($errors) === 0) {
+        if (0 === count($errors)) {
             $result = $userService->register($user);
         }
 
@@ -41,22 +40,24 @@ final class AuthController extends AbstractController
             [
                 'result' => $result,
                 'errors' => $errors,
-                'user' => $user
+                'user' => $user,
             ],
             $result ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST
         );
     }
 
     #[Route('/api/me', methods: ['GET'])]
-    public function me(): JsonResponse {
+    public function me(): JsonResponse
+    {
         $user = $this->getUser();
+
         return $this->json(
             [
-                'user' => $user
+                'user' => $user,
             ],
             Response::HTTP_OK,
             context: [
-                'groups' => ['user:read']
+                'groups' => ['user:read'],
             ]
         );
     }
