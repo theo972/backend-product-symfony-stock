@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
-#[ORM\Table(name: "orders")]
+#[ORM\Table(name: 'orders')]
 class Order
 {
     #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
@@ -45,9 +45,9 @@ class Order
         return $this->name;
     }
 
-    public function setName(string $n): self
+    public function setName(string $name): self
     {
-        $this->name = $n;
+        $this->name = $name;
         return $this;
     }
 
@@ -56,9 +56,9 @@ class Order
         return $this->description;
     }
 
-    public function setDescription(?string $d): self
+    public function setDescription(?string $description): self
     {
-        $this->description = $d;
+        $this->description = $description;
         return $this;
     }
 
@@ -67,9 +67,9 @@ class Order
         return $this->status;
     }
 
-    public function setStatus(string $s): self
+    public function setStatus(string $status): self
     {
-        $this->status = $s;
+        $this->status = $status;
         return $this;
     }
 
@@ -78,9 +78,9 @@ class Order
         return $this->total;
     }
 
-    public function setTotal(int $t): self
+    public function setTotal(int $total): self
     {
-        $this->total = $t;
+        $this->total = $total;
         return $this;
     }
 }

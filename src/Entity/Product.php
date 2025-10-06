@@ -46,9 +46,9 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $n): self
+    public function setName(string $name): self
     {
-        $this->name = $n;
+        $this->name = $name;
         return $this;
     }
 
@@ -57,9 +57,9 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(?string $d): self
+    public function setDescription(?string $description): self
     {
-        $this->description = $d;
+        $this->description = $description;
         return $this;
     }
 
@@ -68,9 +68,9 @@ class Product
         return $this->price;
     }
 
-    public function setPrice(int $p): self
+    public function setPrice(int $price): self
     {
-        $this->price = $p;
+        $this->price = $price;
         return $this;
     }
 
@@ -79,9 +79,9 @@ class Product
         return $this->stock;
     }
 
-    public function setStock(int $s): self
+    public function setStock(int $stock): self
     {
-        $this->stock = $s;
+        $this->stock = $stock;
         return $this;
     }
 }
