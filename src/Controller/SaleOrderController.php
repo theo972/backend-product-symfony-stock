@@ -14,8 +14,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/api/orders')]
-class OrderController extends AbstractController
+#[Route('/api/saleOrder')]
+class SaleOrderController extends AbstractController
 {
     #[Route('', methods: ['GET'])]
     public function list(
