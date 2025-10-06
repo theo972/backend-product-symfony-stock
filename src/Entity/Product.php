@@ -105,7 +105,6 @@ class Product
     {
         if (!$this->orderItems->contains($orderItem)) {
             $this->orderItems->add($orderItem);
-            // sync owning side
             $orderItem->setProduct($this);
         }
         return $this;
@@ -115,7 +114,6 @@ class Product
     {
         if ($this->orderItems->removeElement($orderItem)) {
             if ($orderItem->getProduct() === $this) {
-                // break owning side
                 $orderItem->setProduct(null);
             }
         }

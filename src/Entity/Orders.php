@@ -129,8 +129,8 @@ class Orders
     public function recalculateTotal(): void
     {
         $sum = 0;
-        foreach ($this->items as $it) {
-            $sum += $it->getUnitPrice() * $it->getQuantity();
+        foreach ($this->items as $item) {
+            $sum += $item->getPrice() * $item->getQuantity();
         }
         $this->total = $sum;
     }
