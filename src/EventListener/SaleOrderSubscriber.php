@@ -9,7 +9,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
 #[AsEventListener(event: OrderCreatedEvent::class, method: 'onOrderCreated')]
-final class SaleOrderEvent
+final class SaleOrderSubscriber
 {
     public function __construct(
         private MailerInterface $mailer,

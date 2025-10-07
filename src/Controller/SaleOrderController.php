@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\SaleOrder;
 use App\Repository\SaleOrderRepository;
 use App\Service\SaleOrderService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,21 +14,21 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/saleOrder')]
-class SaleOrderController extends AbstractController
+class SaleOrderController extends ApiBaseController
 {
     #[Route('', methods: ['GET'])]
     public function list(
-        OrderRepository $orderRepository,
+        Request $request,
+        SaleOrderRepository $orderRepository,
     ): JsonResponse {
-        $orders = $orderRepository->findAll();
+        $page = $request->query->getInt('page', 1);
         $size = $request->query->getInt('perPage', 10);
 
+        $data = $orderRepository->search($page, $size);
         return $this->json(
-            ['orders' => $orders],
+            ['total' => $data->getTotalItemCount(), 'data' => $data],
             Response::HTTP_OK,
-            context: [
-                'groups' => ['order:read'],
-            ]
+            ['groups' => ['saleOrder:read']]
         );
     }
 
@@ -48,10 +47,10 @@ class SaleOrderController extends AbstractController
 
     #[Route('', methods: ['POST'])]
     public function create(
-        Request             $request,
-        ValidatorInterface  $validator,
+        Request $request,
+        ValidatorInterface $validator,
         SerializerInterface $serializer,
-        SaleOrderService    $orderService,
+        SaleOrderService $orderService,
     ): JsonResponse {
         $result = false;
         $data = $request->getContent();
@@ -83,20 +82,19 @@ class SaleOrderController extends AbstractController
 
     #[Route('/{id}', methods: ['PUT', 'PATCH'])]
     public function update(
-        int                 $id,
-        Request             $request,
+        string $id,
+        Request $request,
         SaleOrderRepository $orderRepository,
-        ValidatorInterface  $validator,
+        ValidatorInterface $validator,
         SerializerInterface $serializer,
-        SaleOrderService    $orderService,
+        SaleOrderService $orderService,
     ): JsonResponse {
         $result = false;
+
         $saleOrder = $orderRepository->find($id);
+
         if (null === $saleOrder) {
-            return $this->json([
-                'result' => false,
-                'errors' => ['Not Found'],
-            ], Response::HTTP_NOT_FOUND);
+            return $this->jsonNotFound();
         }
 
         $data = $request->getContent();
@@ -131,16 +129,13 @@ class SaleOrderController extends AbstractController
 
     #[Route('/{id}', methods: ['DELETE'])]
     public function delete(
-        int                 $id,
+        string $id ,
         SaleOrderRepository $orderRepository,
-        SaleOrderService    $orderService,
+        SaleOrderService $orderService,
     ): JsonResponse {
         $saleOrder = $orderRepository->find($id);
         if (null === $saleOrder) {
-            return $this->json([
-                'result' => false,
-                'errors' => ['Not Found'],
-            ], Response::HTTP_NOT_FOUND);
+            return $this->jsonNotFound();
         }
 
         $result = $orderService->delete($saleOrder);

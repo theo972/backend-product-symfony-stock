@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\ProductService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,22 +14,21 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/products')]
-class ProductController extends AbstractController
+class ProductController extends ApiBaseController
 {
     #[Route('', methods: ['GET'])]
     public function list(
+        Request $request,
         ProductRepository $productRepository,
     ): JsonResponse {
-        $products = $productRepository->findAll();
+        $page = $request->query->getInt('page', 1);
+        $size = $request->query->getInt('perPage', 10);
 
+        $data = $productRepository->search($page, $size);
         return $this->json(
-            [
-                'products' => $products,
-            ],
+            ['total' => $data->getTotalItemCount(), 'data' => $data],
             Response::HTTP_OK,
-            context: [
-                'groups' => ['product:read'],
-            ]
+            ['groups' => ['product:read']]
         );
     }
 
@@ -93,12 +91,7 @@ class ProductController extends AbstractController
         $result = false;
         $product = $productRepository->findOneBy(['id' => $id]);
         if (null === $product) {
-            return $this->json([
-                'result' => false,
-                'errors' => [
-                    'Not Found',
-                ],
-            ], Response::HTTP_NOT_FOUND);
+            return $this->jsonNotFound();
         }
         $content = (string) $request->getContent();
         /** @var Product $product */
@@ -134,12 +127,7 @@ class ProductController extends AbstractController
         $result = false;
         $product = $productRepository->findOneBy(['id' => $id]);
         if (null === $product) {
-            return $this->json([
-                'result' => false,
-                'errors' => [
-                    'Not Found',
-                ],
-            ], Response::HTTP_NOT_FOUND);
+            return $this->jsonNotFound();
         }
         $result = $productService->delete($product);
 

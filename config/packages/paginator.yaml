@@ -1,0 +1,8 @@
+knp_paginator:
+    default_options:
+        page_name: page
+        sort_field_name: sort
+        sort_direction_name: direction
+        distinct: true
+        page_out_of_range: ignore
+        default_limit: 10
