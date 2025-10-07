@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\UserTrait;
 use App\Repository\ProductRepository;
 use App\Service\ProductService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,8 +15,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/products')]
-class ProductController extends ApiBaseController
+class ProductController extends AbstractApiController
 {
+    use UserTrait;
+
     #[Route('', methods: ['GET'])]
     public function list(
         Request $request,
@@ -102,7 +105,7 @@ class ProductController extends ApiBaseController
 
         $errors = $validator->validate($product, null, ['product:update']);
         if (0 === count($errors)) {
-            $result = $productService->update($product);
+            $result = $productService->update($product, $this->getUser());
         }
 
         return $this->json(

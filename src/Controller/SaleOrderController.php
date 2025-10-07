@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/saleOrder')]
-class SaleOrderController extends ApiBaseController
+class SaleOrderController extends AbstractApiController
 {
     #[Route('', methods: ['GET'])]
     public function list(
@@ -28,7 +28,7 @@ class SaleOrderController extends ApiBaseController
         return $this->json(
             ['total' => $data->getTotalItemCount(), 'data' => $data],
             Response::HTTP_OK,
-            ['groups' => ['saleOrder:read']]
+            ['groups' => ['saleOrder:read', 'product:read', 'user:read']]
         );
     }
 
@@ -64,7 +64,7 @@ class SaleOrderController extends ApiBaseController
 
         $errors = $validator->validate($saleOrder, null, ['saleOrder:create']);
         if (0 === count($errors)) {
-            $result = $orderService->create($saleOrder);
+            $result = $orderService->create($saleOrder, $this->getUser());
         }
 
         return $this->json(
@@ -111,7 +111,7 @@ class SaleOrderController extends ApiBaseController
 
         $errors = $validator->validate($saleOrder, null, ['saleOrder:update']);
         if (0 === count($errors)) {
-            $result = $orderService->update($saleOrder);
+            $result = $orderService->update($saleOrder, $this->getUser());
         }
 
         return $this->json(

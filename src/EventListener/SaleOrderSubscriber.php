@@ -30,10 +30,9 @@ final class SaleOrderSubscriber
             ];
         }
 
-        $to = 'dev@example.com';
         $email = (new TemplatedEmail())
             ->from(new Address('admin@symfony-stock.test', 'Stock Shop'))
-            ->to($to)
+            ->to($saleOrder->getCreatedBy())
             ->subject('Commande '.$saleOrder->getName().' confirmée')
             ->htmlTemplate('email/order_created.html.twig')
             ->context([

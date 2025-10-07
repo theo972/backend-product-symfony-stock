@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'products')]
 class Product
 {
+    use UserTrait;
+
     public function __construct()
     {
         $this->orderItems = new ArrayCollection();
