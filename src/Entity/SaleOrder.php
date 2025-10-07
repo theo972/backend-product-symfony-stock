@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\SaleOrderRepository;
-use App\Validator\NoDuplicateInCollection;
 use App\Validator\NoDuplicateProduct;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SaleOrderRepository::class)]
-#[ORM\Table(name: 'saleOrder')]
+#[ORM\Table(name: 'sale_order')]
 class SaleOrder
 {
     use UserTrait;
