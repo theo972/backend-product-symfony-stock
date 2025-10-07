@@ -18,9 +18,9 @@ final class SaleOrderNormalizer implements DenormalizerInterface, DenormalizerAw
 
     public function __construct(
         #[Autowire(service: 'serializer.normalizer.object')]
-        private NormalizerInterface $normalizer,
-        private ProductRepository $productRepository,
-        private EntityManagerInterface $em,
+        private readonly NormalizerInterface $normalizer,
+        private readonly ProductRepository $productRepository,
+        private readonly EntityManagerInterface $em,
     ) {
     }
 
