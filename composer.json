@@ -14,6 +14,9 @@
         "doctrine/orm": "^3.5.2",
         "knplabs/knp-paginator-bundle": "^6.9.1",
         "lexik/jwt-authentication-bundle": "^3.1.1",
+        "nelmio/api-doc-bundle": "^4",
+        "nelmio/cors-bundle": "^2.5",
+        "symfony/asset": "7.3.*",
         "symfony/console": "7.3.*",
         "symfony/doctrine-messenger": "7.3.*",
         "symfony/dotenv": "7.3.*",
@@ -28,7 +31,8 @@
         "symfony/validator": "7.3.*",
         "symfony/yaml": "7.3.*",
         "twig/extra-bundle": "^2.12|^3.21",
-        "twig/twig": "^2.12|^3.21.1"
+        "twig/twig": "^2.12|^3.21.1",
+        "zircote/swagger-php": "^5.4"
     },
     "config": {
         "allow-plugins": {

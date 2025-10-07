@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Dto\ValidationErrorResponse;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 use App\Entity\Product;
 use App\Entity\UserTrait;
 use App\Repository\ProductRepository;
@@ -20,6 +23,38 @@ class ProductController extends AbstractApiController
     use UserTrait;
 
     #[Route('', methods: ['GET'])]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Get(
+        summary: 'List products (paginated)',
+        security: [['Bearer' => []]],
+        parameters: [
+            new OA\Parameter(
+                name: 'page', in: 'query', required: false,
+                schema: new OA\Schema(type: 'integer', minimum: 1), example: 1
+            ),
+            new OA\Parameter(
+                name: 'perPage', in: 'query', required: false,
+                schema: new OA\Schema(type: 'integer', maximum: 100, minimum: 1), example: 10
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Paginated list of products',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'total', type: 'integer', example: 123),
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(ref: new Model(type: Product::class, groups: ['product:read']))
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
+        ]
+    )]
     public function list(
         Request $request,
         ProductRepository $productRepository,
@@ -35,7 +70,32 @@ class ProductController extends AbstractApiController
         );
     }
 
+
     #[Route('/{id}', methods: ['GET'])]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Get(
+        summary: 'Get a product by id',
+        security: [['Bearer' => []]],
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string'))
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Product details',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'product',
+                            ref: new Model(type: Product::class, groups: ['product:read'])
+                        ),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(response: 404, description: 'Not found'),
+        ]
+    )]
     public function getProduct(
         Product $product
     ): JsonResponse {
@@ -49,6 +109,29 @@ class ProductController extends AbstractApiController
     }
 
     #[Route('', methods: ['POST'])]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Post(
+        summary: 'Create a product',
+        security: [['Bearer' => []]],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(ref: new Model(type: Product::class, groups: ['product:create']))
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Product created',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'result', type: 'boolean', example: true),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(ref: new Model(type: ValidationErrorResponse::class))),
+                        new OA\Property(property: 'product', ref: new Model(type: Product::class, groups: ['product:read'])),
+                    ],
+                    type: 'object'
+                )
+            ),
+        ]
+    )]
     public function create(
         Request $request,
         ValidatorInterface $validator,
@@ -83,6 +166,33 @@ class ProductController extends AbstractApiController
     }
 
     #[Route('/{id}', methods: ['PUT'])]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Put(
+        summary: 'Update a product',
+        security: [['Bearer' => []]],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(ref: new Model(type: Product::class, groups: ['product:update']))
+        ),
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string'))
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Product updated',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'result', type: 'boolean', example: true),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(ref: new Model(type: ValidationErrorResponse::class))),
+                        new OA\Property(property: 'product', ref: new Model(type: Product::class, groups: ['product:read'])),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(response: 404, description: 'Not found'),
+        ]
+    )]
     public function update(
         string $id,
         Request $request,
@@ -122,6 +232,28 @@ class ProductController extends AbstractApiController
     }
 
     #[Route('/{id}', methods: ['DELETE'])]
+    #[OA\Tag(name: 'Products')]
+    #[OA\Delete(
+        summary: 'Delete a product',
+        security: [['Bearer' => []]],
+        parameters: [
+            new OA\Parameter(name: 'id', in: 'path', required: true, schema: new OA\Schema(type: 'string'))
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Deletion result',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'result', type: 'boolean', example: true),
+                        new OA\Property(property: 'product', ref: new Model(type: Product::class, groups: ['product:read'])),
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(response: 404, description: 'Not found'),
+        ]
+    )]
     public function delete(
         string $id,
         ProductRepository $productRepository,
