@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SaleOrderRepository;
+use App\Validator\NoDuplicateInCollection;
+use App\Validator\NoDuplicateProduct;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,6 +51,8 @@ class SaleOrder
     private int $total = 0;
 
     #[ORM\OneToMany(mappedBy: 'saleOrder', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Assert\Count(min: 1, minMessage: 'La commande doit contenir au moins un produit.', groups: ['saleOrder:create', 'saleOrder:update'])]
+    #[NoDuplicateProduct(groups: ['saleOrder:create', 'saleOrder:update'])]
     #[Groups(['saleOrder:read'])]
     private Collection $items;
 

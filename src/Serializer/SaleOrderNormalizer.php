@@ -42,9 +42,9 @@ final class SaleOrderNormalizer implements DenormalizerInterface, DenormalizerAw
         $saleOrder = $this->normalizer->denormalize($data, $type, $format, $context);
         if (\is_array($itemsPayload)) {
             foreach ($itemsPayload as $row) {
-                $product = $this->productRepository->find($row['productId']);
+                $product = $this->productRepository->find($row['id']);
                 if (!$product) {
-                    throw new \InvalidArgumentException('PRODUCT_NOT_FOUND: '.$row['productId']);
+                    throw new \InvalidArgumentException('PRODUCT_NOT_FOUND: '.$row['id']);
                 }
 
                 $item = new OrderItem();

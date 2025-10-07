@@ -9,7 +9,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
 #[AsEventListener(event: OrderCreatedEvent::class, method: 'onOrderCreated')]
-final class SaleOrderSubscriber
+final class SaleOrderListener
 {
     public function __construct(
         private MailerInterface $mailer,
@@ -32,7 +32,7 @@ final class SaleOrderSubscriber
 
         $email = (new TemplatedEmail())
             ->from(new Address('admin@symfony-stock.test', 'Stock Shop'))
-            ->to($saleOrder->getCreatedBy())
+            ->to($saleOrder->getCreatedBy()?->getEmail())
             ->subject('Commande '.$saleOrder->getName().' confirmée')
             ->htmlTemplate('email/order_created.html.twig')
             ->context([
