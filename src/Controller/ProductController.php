@@ -42,7 +42,7 @@ class ProductController extends AbstractApiController
         return $this->json(
             ['product' => $product],
             Response::HTTP_OK,
-            context: [
+            [
                 'groups' => ['product:read'],
             ]
         );
@@ -76,7 +76,7 @@ class ProductController extends AbstractApiController
                 'product' => $product,
             ],
             $result ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST,
-            context: [
+            [
                 'groups' => ['product:read'],
             ]
         );
@@ -115,7 +115,7 @@ class ProductController extends AbstractApiController
                 'product' => $product,
             ],
             $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
-            context: [
+            [
                 'groups' => ['product:read'],
             ]
         );
@@ -140,7 +140,7 @@ class ProductController extends AbstractApiController
                 'product' => $product,
             ],
             $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
-            context: [
+            [
                 'groups' => ['product:read'],
             ]
         );

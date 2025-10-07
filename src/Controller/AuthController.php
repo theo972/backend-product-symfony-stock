@@ -55,7 +55,7 @@ final class AuthController extends AbstractApiController
                 'user' => $user,
             ],
             Response::HTTP_OK,
-            context: [
+            [
                 'groups' => ['user:read'],
             ]
         );
