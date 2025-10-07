@@ -23,7 +23,7 @@ final class SaleOrderListener
         foreach ($saleOrder->getItems() as $item) {
             $product = $item->getProduct();
             $lines[] = [
-                'name' => $product?->getName() ?? 'Produit',
+                'name' => $product?->getName(),
                 'quantity' => $item->getQuantity(),
                 'price' => $item->getPrice(),
                 'sum_total' => $item->getPrice() * $item->getQuantity(),

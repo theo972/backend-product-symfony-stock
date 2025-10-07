@@ -24,6 +24,7 @@ class SaleOrder
     #[ORM\Column(name: 'id', type: 'integer', nullable: false, options: ['unsigned' => true])]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[Groups(groups: ['product:read'])]
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
