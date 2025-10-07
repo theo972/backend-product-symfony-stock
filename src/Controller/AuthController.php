@@ -51,13 +51,9 @@ final class AuthController extends AbstractApiController
         $user = $this->getUser();
 
         return $this->json(
-            [
-                'user' => $user,
-            ],
+            ['user' => $user,],
             Response::HTTP_OK,
-            [
-                'groups' => ['user:read'],
-            ]
+            ['groups' => ['user:read'],]
         );
     }
 }
