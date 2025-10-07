@@ -50,7 +50,7 @@ class SaleOrder
     #[Groups(['saleOrder:read', 'saleOrder:create', 'saleOrder:update'])]
     private int $total = 0;
 
-    #[ORM\OneToMany(mappedBy: 'saleOrder', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'saleOrder', cascade: ['persist'], orphanRemoval: true)]
     #[Assert\Count(min: 1, minMessage: 'La commande doit contenir au moins un produit.', groups: ['saleOrder:create', 'saleOrder:update'])]
     #[NoDuplicateProduct(groups: ['saleOrder:create', 'saleOrder:update'])]
     #[Groups(['saleOrder:read'])]
