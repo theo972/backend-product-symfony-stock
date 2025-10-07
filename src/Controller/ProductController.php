@@ -66,7 +66,7 @@ class ProductController extends AbstractApiController
 
         $errors = $validator->validate($product, null, ['register:create']);
         if (0 === count($errors)) {
-            $result = $productService->create($product);
+            $result = $productService->create($product, $this->getUser());
         }
 
         return $this->json(
@@ -92,7 +92,7 @@ class ProductController extends AbstractApiController
         ProductService $productService,
     ): JsonResponse {
         $result = false;
-        $product = $productRepository->findOneBy(['id' => $id]);
+        $product = $productRepository->find($id);
         if (null === $product) {
             return $this->jsonNotFound();
         }
@@ -128,7 +128,7 @@ class ProductController extends AbstractApiController
         ProductService $productService,
     ): JsonResponse {
         $result = false;
-        $product = $productRepository->findOneBy(['id' => $id]);
+        $product = $productRepository->find($id);
         if (null === $product) {
             return $this->jsonNotFound();
         }
