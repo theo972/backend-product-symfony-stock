@@ -1,7 +1,6 @@
 <?php
 namespace App\Service\Search;
 
-use App\Dto\SearchItem;
 use App\Dto\SearchQuery;
 use App\Service\Search\Provider\SearchProviderRegistry;
 
@@ -15,7 +14,6 @@ final class SearchHandler
 
         $items = [];
         $total = 0;
-        $took  = 0;
 
         foreach ($targets as $key) {
             $provider = $this->registry->get($key);
@@ -25,7 +23,6 @@ final class SearchHandler
                 }
                 continue;
             }
-
             $res = $provider->search($searchQuery);
             foreach ($res['items'] as $it) { $items[] = $it; }
             $total += (int) $res['total'];
@@ -34,7 +31,6 @@ final class SearchHandler
         return [
             'items' => $items,
             'total' => $total,
-            'supports' => $this->registry->allKeys(),
         ];
     }
 }

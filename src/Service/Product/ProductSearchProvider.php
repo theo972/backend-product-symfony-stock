@@ -29,28 +29,18 @@ final class ProductSearchProvider implements SearchProviderInterface
                 ->setParameter('q', '%'.$searchQuery->query.'%');
         }
 
-        // Exemples de filtres : ?filters[category]=12
-        if (($cat = $searchQuery->filters['category'] ?? null) !== null) {
-            $qb->andWhere('p.category = :cat')->setParameter('cat', (int) $cat);
-        }
-
-        // Tri
         if ($searchQuery->sort === 'name') {
             $qb->orderBy('p.name', $searchQuery->order);
         } elseif ($searchQuery->sort === 'price') {
             $qb->orderBy('p.price', $searchQuery->order);
         } else {
-            // fallback
             $qb->orderBy('p.id', 'DESC');
         }
 
-        // Total
         $total = (int) (clone $qb)->select('COUNT(p.id)')->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
 
-        // Pagination
         $offset = ($searchQuery->page - 1) * $searchQuery->perPage;
         $rows = $qb->setFirstResult($offset)->setMaxResults($searchQuery->perPage)->getQuery()->getResult();
-
         $items = [];
         foreach ($rows as $p) {
             /** @var Product $p */

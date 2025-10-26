@@ -4,36 +4,30 @@ namespace App\Service\Search\Provider;
 final class SearchProviderRegistry
 {
     /** @var array<string, SearchProviderInterface> */
-    private array $byKey = [];
+    private array $providers = [];
 
     /**
      * @param iterable<SearchProviderInterface> $providers
      */
     public function __construct(iterable $providers)
     {
-        foreach ($providers as $p) {
-            $key = $p->support();
-            if (isset($this->byKey[$key])) {
+        foreach ($providers as $provider) {
+            $key = $provider->support();
+            if (isset($this->providers[$key])) {
                 throw new \LogicException(sprintf('Duplicate search provider key "%s"', $key));
             }
-            $this->byKey[$key] = $p;
+            $this->$providers[$key] = $providers;
         }
-    }
-
-    /** @return string[] */
-    public function allKeys(): array
-    {
-        return array_keys($this->byKey);
     }
 
     public function get(string $key): ?SearchProviderInterface
     {
-        return $this->byKey[$key] ?? null;
+        return $this->providers[$key] ?? null;
     }
 
     /** @return SearchProviderInterface[] */
     public function all(): array
     {
-        return array_values($this->byKey);
+        return array_values($this->providers);
     }
 }

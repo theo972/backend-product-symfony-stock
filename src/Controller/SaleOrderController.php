@@ -4,15 +4,14 @@ namespace App\Controller;
 
 use App\Dto\ValidationErrorResponse;
 use App\Entity\SaleOrder;
+use App\Service\SaleOrder\SaleOrderService;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use App\Repository\SaleOrderRepository;
-use App\Service\SaleOrderService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Runtime\Internal\SymfonyErrorHandler;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

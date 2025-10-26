@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Dto\ValidationErrorResponse;
+use App\Service\Product\ProductService;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use App\Entity\Product;
 use App\Entity\UserTrait;
 use App\Repository\ProductRepository;
-use App\Service\ProductService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

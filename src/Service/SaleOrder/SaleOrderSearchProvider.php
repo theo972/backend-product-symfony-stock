@@ -27,12 +27,10 @@ final class SaleOrderSearchProvider implements SearchProviderInterface
             $qb->andWhere('(o.name LIKE :q OR o.description LIKE :q)')
                 ->setParameter('q', '%'.$searchQuery->query.'%');
         }
-
         if (($status = $searchQuery->filters['status'] ?? null) !== null) {
             $qb->andWhere('o.status = :st')->setParameter('st', $status);
         }
 
-        // Tri
         if ($searchQuery->sort === 'name') {
             $qb->orderBy('o.name', $searchQuery->order);
         } elseif ($searchQuery->sort === 'total') {
@@ -42,7 +40,6 @@ final class SaleOrderSearchProvider implements SearchProviderInterface
         }
 
         $total = (int) (clone $qb)->select('COUNT(o.id)')->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
-
         $offset = ($searchQuery->page - 1) * $searchQuery->perPage;
         $rows = $qb->setFirstResult($offset)->setMaxResults($searchQuery->perPage)->getQuery()->getResult();
 
