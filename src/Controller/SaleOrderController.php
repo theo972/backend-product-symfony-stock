@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api/saleOrder')]
 class SaleOrderController extends AbstractApiController
 {
-    #[Route('', methods: ['GET'])]
+    #[Route('/search', methods: ['GET'])]
     #[OA\Tag(name: 'SaleOrder')]
     #[OA\Get(
         summary: 'List sale orders (paginated)',

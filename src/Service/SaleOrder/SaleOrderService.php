@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\SaleOrder;
 
 use App\Entity\SaleOrder;
 use App\Entity\User;

@@ -22,7 +22,7 @@ class ProductController extends AbstractApiController
 {
     use UserTrait;
 
-    #[Route('', methods: ['GET'])]
+    #[Route('/search', methods: ['GET'])]
     #[OA\Tag(name: 'Products')]
     #[OA\Get(
         summary: 'List products (paginated)',
@@ -71,7 +71,7 @@ class ProductController extends AbstractApiController
     }
 
 
-    #[Route('/{id}', methods: ['GET'])]
+    #[Route('/show/{id}', methods: ['GET'])]
     #[OA\Tag(name: 'Products')]
     #[OA\Get(
         summary: 'Get a product by id',
@@ -276,5 +276,16 @@ class ProductController extends AbstractApiController
                 'groups' => ['product:read'],
             ]
         );
+    }
+
+    #[Route('/dashboard', name: 'dashboard', methods: ['GET'])]
+    public function dashboard(): JsonResponse
+    {
+        return $this->json([
+            'productsCount' => 42,
+            'totalStockQty' => 785,
+            'openPurchases' => 4,
+            'pendingShipments' => 2,
+        ]);
     }
 }
