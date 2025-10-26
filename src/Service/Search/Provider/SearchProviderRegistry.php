@@ -16,7 +16,7 @@ final class SearchProviderRegistry
             if (isset($this->providers[$key])) {
                 throw new \LogicException(sprintf('Duplicate search provider key "%s"', $key));
             }
-            $this->$providers[$key] = $providers;
+            $this->providers[$key] = $provider;
         }
     }
 
