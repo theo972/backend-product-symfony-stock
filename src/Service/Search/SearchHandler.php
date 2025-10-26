@@ -14,10 +14,6 @@ final class SearchHandler
         if (!$provider && $searchQuery->support !== null) {
             throw new \InvalidArgumentException(sprintf('Unknown support "%s"', $searchQuery->support));
         }
-        $response = $provider->search($searchQuery);
-        return [
-            'items' => $response['items'],
-            'total' => $response['total'],
-        ];
+        return $provider->search($searchQuery);
     }
 }

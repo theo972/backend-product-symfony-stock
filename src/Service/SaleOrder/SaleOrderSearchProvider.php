@@ -43,15 +43,9 @@ final class SaleOrderSearchProvider implements SearchProviderInterface
         $offset = ($searchQuery->page - 1) * $searchQuery->perPage;
         $rows = $qb->setFirstResult($offset)->setMaxResults($searchQuery->perPage)->getQuery()->getResult();
 
-        $items = [];
-        foreach ($rows as $o) {
-            /** @var SaleOrder $o */
-            $items[] = $o;
-        }
-
         return [
-            'items'  => $items,
-            'total'  => $total,
+            'data' => $rows,
+            'total' => $total,
         ];
     }
 }

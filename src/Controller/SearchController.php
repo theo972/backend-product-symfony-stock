@@ -26,7 +26,7 @@ class SearchController extends AbstractApiController
         );
         $result = $handler->handle($searchQuery);
         return $this->json(
-            [$result],
+            $result,
             Response::HTTP_OK,
             ['groups' => ['search:read', 'product:read', 'saleOrder:read']]
         );

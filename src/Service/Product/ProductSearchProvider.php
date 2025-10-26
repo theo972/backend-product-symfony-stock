@@ -41,15 +41,10 @@ final class ProductSearchProvider implements SearchProviderInterface
 
         $offset = ($searchQuery->page - 1) * $searchQuery->perPage;
         $rows = $qb->setFirstResult($offset)->setMaxResults($searchQuery->perPage)->getQuery()->getResult();
-        $items = [];
-        foreach ($rows as $p) {
-            /** @var Product $p */
-            $items[] = $p;
-        }
 
         return [
-            'items'  => $items,
-            'total'  => $total,
+            'data' => $rows,
+            'total' => $total,
         ];
     }
 }
