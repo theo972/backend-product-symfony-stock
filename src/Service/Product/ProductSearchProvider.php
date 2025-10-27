@@ -7,16 +7,10 @@ use App\Service\Search\Provider\SearchProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.search_provider')]
+#[AutoconfigureTag('app.search_provider', attributes: ['key' => 'product'])]
 final class ProductSearchProvider implements SearchProviderInterface
 {
     public function __construct(private readonly EntityManagerInterface $em) {}
-
-    public function support(): string
-    {
-        return 'product';
-    }
-
 
     public function search(SearchQuery $searchQuery): array
     {

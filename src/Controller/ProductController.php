@@ -22,55 +22,6 @@ class ProductController extends AbstractApiController
 {
     use UserTrait;
 
-    #[Route('/search', methods: ['GET'])]
-    #[OA\Tag(name: 'Products')]
-    #[OA\Get(
-        summary: 'List products (paginated)',
-        security: [['Bearer' => []]],
-        parameters: [
-            new OA\Parameter(
-                name: 'page', in: 'query', required: false,
-                schema: new OA\Schema(type: 'integer', minimum: 1), example: 1
-            ),
-            new OA\Parameter(
-                name: 'perPage', in: 'query', required: false,
-                schema: new OA\Schema(type: 'integer', maximum: 100, minimum: 1), example: 10
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Paginated list of products',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'total', type: 'integer', example: 123),
-                        new OA\Property(
-                            property: 'data',
-                            type: 'array',
-                            items: new OA\Items(ref: new Model(type: Product::class, groups: ['product:read']))
-                        ),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    public function list(
-        Request $request,
-        ProductRepository $productRepository,
-    ): JsonResponse {
-        $page = $request->query->getInt('page', 1);
-        $size = $request->query->getInt('perPage', 10);
-
-        $data = $productRepository->search($page, $size);
-        return $this->json(
-            ['total' => $data->getTotalItemCount(), 'data' => $data],
-            Response::HTTP_OK,
-            ['groups' => ['product:read']]
-        );
-    }
-
-
     #[Route('/show/{id}', methods: ['GET'])]
     #[OA\Tag(name: 'Products')]
     #[OA\Get(

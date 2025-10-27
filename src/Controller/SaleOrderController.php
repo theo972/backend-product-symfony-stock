@@ -19,54 +19,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/api/saleOrder')]
 class SaleOrderController extends AbstractApiController
 {
-    #[Route('/search', methods: ['GET'])]
-    #[OA\Tag(name: 'SaleOrder')]
-    #[OA\Get(
-        summary: 'List sale orders (paginated)',
-        security: [['Bearer' => []]],
-        parameters: [
-            new OA\Parameter(
-                name: 'page', in: 'query', required: false,
-                schema: new OA\Schema(type: 'integer', minimum: 1), example: 1
-            ),
-            new OA\Parameter(
-                name: 'perPage', in: 'query', required: false,
-                schema: new OA\Schema(type: 'integer', maximum: 100, minimum: 1), example: 10
-            ),
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Paginated list of sale orders',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'total', type: 'integer', example: 123),
-                        new OA\Property(
-                            property: 'data',
-                            type: 'array',
-                            items: new OA\Items(ref: new Model(type: SaleOrder::class, groups: ['saleOrder:read']))
-                        ),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    public function list(
-        Request $request,
-        SaleOrderRepository $orderRepository,
-    ): JsonResponse {
-        $page = $request->query->getInt('page', 1);
-        $size = $request->query->getInt('perPage', 10);
-
-        $data = $orderRepository->search($page, $size);
-        return $this->json(
-            ['total' => $data->getTotalItemCount(), 'data' => $data],
-            Response::HTTP_OK,
-            ['groups' => ['saleOrder:read', 'product:read', 'user:read']]
-        );
-    }
-
     #[Route('/{id}', methods: ['GET'])]
     #[OA\Tag(name: 'SaleOrder')]
     #[OA\Get(
