@@ -4,10 +4,10 @@ namespace App\Service\Search\Provider;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 
-final class SearchProviderRegistry
+final readonly class SearchProviderRegistry
 {
     public function __construct(
-        #[AutowireLocator('app.search_provider', indexAttribute: 'key')]
+        #[AutowireLocator('app.search_provider', indexAttribute: 'target')]
         private ContainerInterface $locator
     ) {}
 

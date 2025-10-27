@@ -7,7 +7,7 @@ use App\Service\Search\Provider\SearchProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.search_provider', attributes: ['key' => 'product'])]
+#[AutoconfigureTag('app.search_provider', attributes: ['target' => 'product'])]
 final class ProductSearchProvider implements SearchProviderInterface
 {
     public function __construct(private readonly EntityManagerInterface $em) {}
@@ -15,24 +15,21 @@ final class ProductSearchProvider implements SearchProviderInterface
     public function search(SearchQuery $searchQuery): array
     {
         $qb = $this->em->createQueryBuilder()
-            ->select('p')
-            ->from(Product::class, 'p');
+            ->select('product')
+            ->from(Product::class, 'product');
 
         if ($searchQuery->query) {
-            $qb->andWhere('(p.name LIKE :q OR p.description LIKE :q)')
-                ->setParameter('q', '%'.$searchQuery->query.'%');
+            $qb->andWhere('(product.name LIKE :query OR product.description LIKE :query)')
+                ->setParameter('query', '%'.$searchQuery->query.'%');
         }
 
         if ($searchQuery->sort === 'name') {
-            $qb->orderBy('p.name', $searchQuery->order);
+            $qb->orderBy('product.name', $searchQuery->order);
         } elseif ($searchQuery->sort === 'price') {
-            $qb->orderBy('p.price', $searchQuery->order);
-        } else {
-            $qb->orderBy('p.id', 'DESC');
+            $qb->orderBy('product.price', $searchQuery->order);
         }
 
-        $total = (int) (clone $qb)->select('COUNT(p.id)')->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
-
+        $total = (int) (clone $qb)->select('COUNT(product.id)')->getQuery()->getSingleScalarResult();
         $offset = ($searchQuery->page - 1) * $searchQuery->perPage;
         $rows = $qb->setFirstResult($offset)->setMaxResults($searchQuery->perPage)->getQuery()->getResult();
 

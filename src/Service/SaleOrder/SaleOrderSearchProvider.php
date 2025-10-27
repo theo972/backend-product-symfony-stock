@@ -7,7 +7,7 @@ use App\Service\Search\Provider\SearchProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.search_provider', attributes: ['key' => 'saleOrder'])]
+#[AutoconfigureTag('app.search_provider', attributes: ['target' => 'saleOrder'])]
 final class SaleOrderSearchProvider implements SearchProviderInterface
 {
     public function __construct(private readonly EntityManagerInterface $em) {}
@@ -15,26 +15,24 @@ final class SaleOrderSearchProvider implements SearchProviderInterface
     public function search(SearchQuery $searchQuery): array
     {
         $qb = $this->em->createQueryBuilder()
-            ->select('o')
-            ->from(SaleOrder::class, 'o');
+            ->select('saleOrder')
+            ->from(SaleOrder::class, 'saleOrder');
 
         if ($searchQuery->query) {
-            $qb->andWhere('(o.name LIKE :q OR o.description LIKE :q)')
-                ->setParameter('q', '%'.$searchQuery->query.'%');
+            $qb->andWhere('(saleOrder.name LIKE :query OR saleOrder.description LIKE :query)')
+                ->setParameter('query', '%'.$searchQuery->query.'%');
         }
         if (($status = $searchQuery->filters['status'] ?? null) !== null) {
-            $qb->andWhere('o.status = :st')->setParameter('st', $status);
+            $qb->andWhere('saleOrder.status = :status')->setParameter('status', $status);
         }
 
         if ($searchQuery->sort === 'name') {
-            $qb->orderBy('o.name', $searchQuery->order);
-        } elseif ($searchQuery->sort === 'total') {
-            $qb->orderBy('o.total', $searchQuery->order);
+            $qb->orderBy('saleOrder.name', $searchQuery->order);
         } else {
-            $qb->orderBy('o.id', 'DESC');
+            $qb->orderBy('saleOrder.id', 'DESC');
         }
 
-        $total = (int) (clone $qb)->select('COUNT(o.id)')->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
+        $total = (int) (clone $qb)->select('COUNT(saleOrder.id)')->getQuery()->getSingleScalarResult();
         $offset = ($searchQuery->page - 1) * $searchQuery->perPage;
         $rows = $qb->setFirstResult($offset)->setMaxResults($searchQuery->perPage)->getQuery()->getResult();
 
