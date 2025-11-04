@@ -98,7 +98,7 @@ class ProductController extends AbstractApiController
             ['groups' => ['product:create']]
         );
 
-        $errors = $validator->validate($product, null, ['register:create']);
+        $errors = $validator->validate($product, null, ['product:create']);
         if (0 === count($errors)) {
             $result = $productService->create($product, $this->getUser());
         }
